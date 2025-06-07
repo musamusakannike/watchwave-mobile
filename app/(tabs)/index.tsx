@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { useEffect, useState, useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, {
   Extrapolation,
@@ -127,7 +127,7 @@ export default function HomeScreen() {
   const handleSeeAllPress = (category: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     router.push({
-      pathname: "/(tabs)/search",
+      pathname: `/movies/[category]`,
       params: {
         category,
         genre: selectedCategory !== "all" ? selectedCategory : undefined,

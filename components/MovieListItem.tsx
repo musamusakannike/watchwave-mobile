@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
+import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import { getImageUrl } from "@/api/movies"
@@ -31,7 +32,7 @@ interface MovieListItemProps {
   showMediaType?: boolean
 }
 
-export function MovieListItem({ movie, onPress, genres = [], showMediaType = false }: MovieListItemProps) {
+const MovieListItem = React.memo(function MovieListItem({ movie, onPress, genres = [], showMediaType = false }: MovieListItemProps) {
   const posterUrl = getImageUrl(movie.poster_path, "w185")
 
   // Get genre names from IDs
@@ -111,7 +112,7 @@ export function MovieListItem({ movie, onPress, genres = [], showMediaType = fal
       </View>
     </TouchableOpacity>
   )
-}
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -203,3 +204,6 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
 })
+
+export { MovieListItem }
+

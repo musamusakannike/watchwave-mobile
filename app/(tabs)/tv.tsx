@@ -95,7 +95,7 @@ export default function TVScreen() {
       setLoading(false)
     }
   }, [selectedCategory])
-  
+
   useEffect(() => {
     loadData()
   }, [selectedCategory, loadData])
@@ -114,10 +114,9 @@ export default function TVScreen() {
   const handleSeeAllPress = (category: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     router.push({
-      pathname: "/(tabs)/search",
+      pathname: `/tvs/[category]`,
       params: {
         category,
-        mediaType: "tv",
         genre: selectedCategory !== "all" ? selectedCategory : undefined,
       },
     })
