@@ -107,3 +107,15 @@ export const fetchTVGenres = () => {
 export const fetchTVWatchProviders = (tvId: string) => {
   return api.get(`/tv/${tvId}/watch/providers`).then((res) => res.data)
 }
+
+// Helper function to get image URL
+export const getImageUrl = (path: string | null, size = "w500") => {
+  if (!path) return null
+  return `https://image.tmdb.org/t/p/${size}${path}`
+}
+
+// Helper function to get backdrop URL
+export const getBackdropUrl = (path: string | null, size = "w1280") => {
+  if (!path) return null
+  return `https://image.tmdb.org/t/p/${size}${path}`
+}

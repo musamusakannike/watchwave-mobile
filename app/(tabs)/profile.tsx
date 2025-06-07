@@ -9,10 +9,10 @@ import { Alert, Linking, ScrollView, StyleSheet, Switch, Text, TouchableOpacity,
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import { useTheme } from "@/context/ThemeContext"
+import { ThemeContextType, useTheme } from "@/context/ThemeContext"
 
 export default function ProfileScreen() {
-  const { darkMode, toggleDarkMode } = useTheme()
+  const { darkMode, toggleDarkMode } = useTheme() as ThemeContextType
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
 
   const handleToggleNotifications = () => {
@@ -71,7 +71,7 @@ export default function ProfileScreen() {
     ])
   }
 
-  const openLink = (url) => {
+  const openLink = (url: string): void => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     Linking.openURL(url)
   }

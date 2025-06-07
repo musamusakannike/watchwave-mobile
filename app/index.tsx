@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import Animated, {
   Easing,
@@ -22,8 +22,25 @@ export default function Index() {
   const textOpacity = useSharedValue(0)
   const textTranslateY = useSharedValue(50)
   const backgroundOpacity = useSharedValue(0)
-  const dotOpacities = [useSharedValue(0), useSharedValue(0), useSharedValue(0)]
-  const dotScales = [useSharedValue(0), useSharedValue(0), useSharedValue(0)]
+  
+  // Create shared values first
+  const dotOpacity1 = useSharedValue(0)
+  const dotOpacity2 = useSharedValue(0)
+  const dotOpacity3 = useSharedValue(0)
+  const dotScale1 = useSharedValue(0)
+  const dotScale2 = useSharedValue(0)
+  const dotScale3 = useSharedValue(0)
+  
+  // Then memoize the arrays
+  const dotOpacities = useMemo(
+    () => [dotOpacity1, dotOpacity2, dotOpacity3],
+    [dotOpacity1, dotOpacity2, dotOpacity3]
+  )
+  
+  const dotScales = useMemo(
+    () => [dotScale1, dotScale2, dotScale3],
+    [dotScale1, dotScale2, dotScale3]
+  )
 
   const checkFirstTimeUser = async () => {
     try {
@@ -87,7 +104,7 @@ export default function Index() {
     }, 2500)
 
     return () => clearTimeout(timeoutId)
-  }, [])
+  }, [backgroundOpacity, dotOpacities, dotScales, logoOpacity, logoScale, textOpacity, textTranslateY])
 
   const backgroundStyle = useAnimatedStyle(() => {
     return {

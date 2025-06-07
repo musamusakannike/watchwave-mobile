@@ -1,11 +1,20 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 
-const ThemeContext = createContext()
+export interface ThemeContextType {
+  darkMode: boolean
+  toggleDarkMode: () => Promise<void>
+}
 
-export function ThemeProvider({ children }) {
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+
+interface ThemeProviderProps {
+  children: ReactNode
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
   const [darkMode, setDarkMode] = useState(true)
 
   useEffect(() => {
