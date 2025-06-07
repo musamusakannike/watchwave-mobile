@@ -10,7 +10,20 @@ const CARD_HEIGHT = CARD_WIDTH * 1.5
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
 
-export function MovieCard({ movie, onPress, delay = 0 }) {
+interface MovieCardProps {
+  movie: {
+    id: number
+    title?: string
+    name?: string
+    poster_path: string | null
+    vote_average: number
+    // Add other fields as needed
+  }
+  onPress: () => void
+  delay?: number
+}
+
+export function MovieCard({ movie, onPress, delay = 0 }: MovieCardProps) {
   const posterUrl = getImageUrl(movie.poster_path, "w342")
 
   return (
@@ -21,7 +34,11 @@ export function MovieCard({ movie, onPress, delay = 0 }) {
       activeOpacity={0.8}
     >
       <Image
-        source={{ uri: posterUrl }}
+        source={
+          posterUrl
+            ? { uri: posterUrl }
+            : require("../assets/images/placeholder-poster.png")
+        }
         style={styles.poster}
         contentFit="cover"
         placeholder={require("../assets/images/placeholder-poster.png")}
@@ -29,12 +46,14 @@ export function MovieCard({ movie, onPress, delay = 0 }) {
       />
 
       <Text style={styles.title} numberOfLines={2}>
-        {movie.title}
+        {movie.title || movie.name || ""}
       </Text>
 
       <Animated.View style={styles.ratingContainer}>
         <MaterialCommunityIcons name="star" size={12} color="#FFD700" />
-        <Text style={styles.rating}>{movie.vote_average?.toFixed(1) || "N/A"}</Text>
+        <Text style={styles.rating}>
+          {movie.vote_average?.toFixed(1) || "N/A"}
+        </Text>
       </Animated.View>
     </AnimatedTouchable>
   )

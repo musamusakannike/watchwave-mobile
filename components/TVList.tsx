@@ -1,22 +1,19 @@
-import { ScrollView } from "react-native"
-import { TVCard } from "./TVCard"
-import { router } from "expo-router"
 import * as Haptics from "expo-haptics"
-import { Show } from "./TVListItem"
+import { router } from "expo-router"
+import { ScrollView } from "react-native"
+import { Movie, MovieListItem } from "./MovieListItem"
 
-export function TVList({ shows }: { shows: Show[] }) {
-  const handleTVPress = (show: Show) => {
+
+export function TVList({ shows }: { shows: Movie[] }) {
+  const handleTVPress = (show: Movie) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-    router.push({
-      pathname: "/tv/[id]" as const,
-      params: { id: show.id }
-    })
+    router.push(`/tv/${show.id}`)
   }
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 16 }}>
-      {shows.map((show, index) => (
-        <TVCard key={show.id} show={show} onPress={() => handleTVPress(show)} delay={index * 100} />
+      {shows.map((show: Movie) => (
+        <MovieListItem key={show.id} movie={show} onPress={() => handleTVPress(show)} />
       ))}
     </ScrollView>
   )
