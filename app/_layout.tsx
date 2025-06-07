@@ -67,13 +67,6 @@ export default function RootLayout() {
                 animation: "slide_from_bottom",
               }}
             />
-            <Stack.Screen
-              name="search"
-              options={{
-                presentation: "modal",
-                animation: "slide_from_bottom",
-              }}
-            />
           </Stack>
         </ThemeProvider>
       </GestureHandlerRootView>
