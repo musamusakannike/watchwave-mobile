@@ -10,24 +10,94 @@ const api = axios.create({
   },
 })
 
-// Movie endpoints
-export const fetchTrending = (timeWindow = "day") => {
+// Genre mapping for categories
+const GENRE_MAPPING = {
+  action: 28,
+  comedy: 35,
+  drama: 18,
+  horror: 27,
+  romance: 10749,
+  "sci-fi": 878,
+  thriller: 53,
+}
+
+// Movie endpoints with genre filtering
+export const fetchTrending = (timeWindow = "day", genreId?: number) => {
+  if (genreId) {
+    return api
+      .get("/discover/movie", {
+        params: {
+          with_genres: genreId,
+          sort_by: "popularity.desc",
+          "vote_count.gte": 100,
+        },
+      })
+      .then((res) => res.data)
+  }
   return api.get(`/trending/movie/${timeWindow}`).then((res) => res.data)
 }
 
-export const fetchPopular = (page = 1) => {
+export const fetchPopular = (page = 1, genreId?: number) => {
+  if (genreId) {
+    return api
+      .get("/discover/movie", {
+        params: {
+          page,
+          with_genres: genreId,
+          sort_by: "popularity.desc",
+        },
+      })
+      .then((res) => res.data)
+  }
   return api.get("/movie/popular", { params: { page } }).then((res) => res.data)
 }
 
-export const fetchNowPlaying = (page = 1) => {
+export const fetchNowPlaying = (page = 1, genreId?: number) => {
+  if (genreId) {
+    return api
+      .get("/discover/movie", {
+        params: {
+          page,
+          with_genres: genreId,
+          "primary_release_date.gte": new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          "primary_release_date.lte": new Date().toISOString().split("T")[0],
+          sort_by: "popularity.desc",
+        },
+      })
+      .then((res) => res.data)
+  }
   return api.get("/movie/now_playing", { params: { page } }).then((res) => res.data)
 }
 
-export const fetchUpcoming = (page = 1) => {
+export const fetchUpcoming = (page = 1, genreId?: number) => {
+  if (genreId) {
+    return api
+      .get("/discover/movie", {
+        params: {
+          page,
+          with_genres: genreId,
+          "primary_release_date.gte": new Date().toISOString().split("T")[0],
+          sort_by: "popularity.desc",
+        },
+      })
+      .then((res) => res.data)
+  }
   return api.get("/movie/upcoming", { params: { page } }).then((res) => res.data)
 }
 
-export const fetchTopRated = (page = 1) => {
+export const fetchTopRated = (page = 1, genreId?: number) => {
+  if (genreId) {
+    return api
+      .get("/discover/movie", {
+        params: {
+          page,
+          with_genres: genreId,
+          sort_by: "vote_average.desc",
+          "vote_count.gte": 300,
+        },
+      })
+      .then((res) => res.data)
+  }
   return api.get("/movie/top_rated", { params: { page } }).then((res) => res.data)
 }
 
@@ -107,14 +177,19 @@ export const fetchConfiguration = () => {
   return api.get("/configuration").then((res) => res.data)
 }
 
+// Helper function to get genre ID from category
+export const getGenreIdFromCategory = (category: string): number | undefined => {
+  return GENRE_MAPPING[category as keyof typeof GENRE_MAPPING]
+}
+
 // Helper function to get image URL
-export const getImageUrl = (path: string | null | undefined, size: string = "w500") => {
+export const getImageUrl = (path: string | null | undefined, size = "w500") => {
   if (!path) return null
   return `https://image.tmdb.org/t/p/${size}${path}`
 }
 
 // Helper function to get backdrop URL
-export const getBackdropUrl = (path: string | null | undefined, size: string = "w1280") => {
+export const getBackdropUrl = (path: string | null | undefined, size = "w1280") => {
   if (!path) return null
   return `https://image.tmdb.org/t/p/${size}${path}`
 }
