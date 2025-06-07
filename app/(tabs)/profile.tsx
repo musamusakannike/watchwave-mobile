@@ -3,23 +3,13 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as Haptics from "expo-haptics"
+import { router } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { useState } from "react"
-import { Alert, Linking, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native"
+import { Alert, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import { ThemeContextType, useTheme } from "@/context/ThemeContext"
-
 export default function ProfileScreen() {
-  const { darkMode, toggleDarkMode } = useTheme() as ThemeContextType
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
-
-  const handleToggleNotifications = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    setNotificationsEnabled(!notificationsEnabled)
-  }
-
   const handleClearFavorites = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 
@@ -93,49 +83,12 @@ export default function ProfileScreen() {
           <Text style={styles.profileEmail}>user@example.com</Text>
         </Animated.View>
 
-        <Animated.View style={styles.section} entering={FadeInDown.delay(200).duration(500)}>
-          <Text style={styles.sectionTitle}>Preferences</Text>
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingIconContainer}>
-              {darkMode ? (
-                <MaterialCommunityIcons name="moon-waning-crescent" size={20} color="#E50914" />
-              ) : (
-                <MaterialCommunityIcons name="white-balance-sunny" size={20} color="#E50914" />
-              )}
-            </View>
-            <Text style={styles.settingText}>Dark Mode</Text>
-            <Switch
-              value={darkMode}
-              onValueChange={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                toggleDarkMode()
-              }}
-              trackColor={{ false: "#3E3E3E", true: "#E50914" }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingIconContainer}>
-              <MaterialCommunityIcons name="bell" size={20} color="#E50914" />
-            </View>
-            <Text style={styles.settingText}>Notifications</Text>
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={handleToggleNotifications}
-              trackColor={{ false: "#3E3E3E", true: "#E50914" }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-        </Animated.View>
-
         <Animated.View style={styles.section} entering={FadeInDown.delay(300).duration(500)}>
           <Text style={styles.sectionTitle}>Content</Text>
 
           <TouchableOpacity
             style={styles.settingItem}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            onPress={() => {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push("/favorites")}}
           >
             <View style={styles.settingIconContainer}>
               <MaterialCommunityIcons name="heart" size={20} color="#E50914" />
@@ -174,28 +127,6 @@ export default function ProfileScreen() {
             <Text style={styles.settingText}>API Information</Text>
             <MaterialCommunityIcons name="chevron-right" size={20} color="#888888" />
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.settingItem}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-          >
-            <View style={styles.settingIconContainer}>
-              <MaterialCommunityIcons name="help-circle" size={20} color="#E50914" />
-            </View>
-            <Text style={styles.settingText}>Help & Support</Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} color="#888888" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.settingItem}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-          >
-            <View style={styles.settingIconContainer}>
-              <MaterialCommunityIcons name="shield" size={20} color="#E50914" />
-            </View>
-            <Text style={styles.settingText}>Privacy Policy</Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} color="#888888" />
-          </TouchableOpacity>
         </Animated.View>
 
         <Animated.View style={styles.section} entering={FadeInDown.delay(500).duration(500)}>
@@ -212,7 +143,7 @@ export default function ProfileScreen() {
 
         <Animated.View style={styles.versionContainer} entering={FadeInDown.delay(600).duration(500)}>
           <Text style={styles.versionText}>Watchwave v1.0.0</Text>
-          <Text style={styles.versionSubtext}>Made with ❤️ for movie lovers</Text>
+          <Text style={styles.versionSubtext}>Made with ❤️ for movie lovers by @codiac</Text>
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
