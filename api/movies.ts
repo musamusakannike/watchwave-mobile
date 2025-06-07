@@ -31,7 +31,7 @@ export const fetchTopRated = (page = 1) => {
   return api.get("/movie/top_rated", { params: { page } }).then((res) => res.data)
 }
 
-export const fetchMovieDetails = (movieId: string) => {
+export const fetchMovieDetails = (movieId: number | string) => {
   return api
     .get(`/movie/${movieId}`, {
       params: {
@@ -41,29 +41,23 @@ export const fetchMovieDetails = (movieId: string) => {
     .then((res) => res.data)
 }
 
-export const fetchMovieCredits = (movieId: string) => {
+export const fetchMovieCredits = (movieId: number | string) => {
   return api.get(`/movie/${movieId}/credits`).then((res) => res.data)
 }
 
-export const fetchMovieVideos = (movieId: string) => {
+export const fetchMovieVideos = (movieId: number | string) => {
   return api.get(`/movie/${movieId}/videos`).then((res) => res.data)
 }
 
-export const fetchSimilarMovies = (movieId: string) => {
+export const fetchSimilarMovies = (movieId: number | string) => {
   return api.get(`/movie/${movieId}/similar`).then((res) => res.data)
 }
 
-export const fetchMovieReviews = (movieId: string) => {
+export const fetchMovieReviews = (movieId: number | string) => {
   return api.get(`/movie/${movieId}/reviews`).then((res) => res.data)
 }
 
-export const searchMovies = (params: {
-  query: string
-  page?: number
-  genres?: string[]
-  year?: number
-  sortBy?: string
-}) => {
+export const searchMovies = (params: any) => {
   const { query, page = 1, genres, year, sortBy } = params
 
   if (query) {
@@ -94,7 +88,7 @@ export const fetchGenres = () => {
   return api.get("/genre/movie/list").then((res) => res.data)
 }
 
-export const fetchPersonDetails = (personId: string) => {
+export const fetchPersonDetails = (personId: number | string) => {
   return api
     .get(`/person/${personId}`, {
       params: {
@@ -104,7 +98,7 @@ export const fetchPersonDetails = (personId: string) => {
     .then((res) => res.data)
 }
 
-export const fetchWatchProviders = (movieId: string) => {
+export const fetchWatchProviders = (movieId: number | string) => {
   return api.get(`/movie/${movieId}/watch/providers`).then((res) => res.data)
 }
 
@@ -114,13 +108,13 @@ export const fetchConfiguration = () => {
 }
 
 // Helper function to get image URL
-export const getImageUrl = (path: string | null, size = "w500") => {
+export const getImageUrl = (path: string | null | undefined, size: string = "w500") => {
   if (!path) return null
   return `https://image.tmdb.org/t/p/${size}${path}`
 }
 
 // Helper function to get backdrop URL
-export const getBackdropUrl = (path: string | null, size = "w1280") => {
+export const getBackdropUrl = (path: string | null | undefined, size: string = "w1280") => {
   if (!path) return null
   return `https://image.tmdb.org/t/p/${size}${path}`
 }

@@ -81,7 +81,7 @@ export default function TVScreen() {
   const handleSeeAllPress = (category: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     router.push({
-      pathname: "/search",
+      pathname: "/(tabs)/search",
       params: { category, mediaType: "tv" },
     })
   }

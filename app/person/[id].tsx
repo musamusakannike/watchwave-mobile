@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import { router, Stack, useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import {
     ActivityIndicator,
     Dimensions,
@@ -70,13 +70,7 @@ export default function PersonDetailScreen() {
     const [loading, setLoading] = useState(true)
     const [showFullBio, setShowFullBio] = useState(false)
 
-    useEffect(() => {
-        if (id) {
-            loadPerson()
-        }
-    }, [id])
-
-    const loadPerson = async () => {
+    const loadPerson = useCallback(async () => {
         if (!id) return
         try {
             setLoading(true)
@@ -87,7 +81,13 @@ export default function PersonDetailScreen() {
             console.error("Error loading person details:", error)
             setLoading(false)
         }
-    }
+    }, [id])
+
+    useEffect(() => {
+        if (id) {
+            loadPerson()
+        }
+    }, [id, loadPerson])
 
     const handleShare = async () => {
         if (!person) return

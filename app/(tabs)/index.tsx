@@ -120,7 +120,7 @@ export default function HomeScreen() {
   const handleSeeAllPress = (category: CategoryType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     router.push({
-      pathname: "/search",
+      pathname: "/(tabs)/search",
       params: { category },
     })
   }

@@ -31,7 +31,7 @@ export const fetchOnTheAirTv = (page = 1) => {
   return api.get("/tv/on_the_air", { params: { page } }).then((res) => res.data)
 }
 
-export const fetchTVDetails = (tvId: string) => {
+export const fetchTVDetails = (tvId: number | string) => {
   return api
     .get(`/tv/${tvId}`, {
       params: {
@@ -41,39 +41,31 @@ export const fetchTVDetails = (tvId: string) => {
     .then((res) => res.data)
 }
 
-export const fetchTVCredits = (tvId: string) => {
+export const fetchTVCredits = (tvId: number | string) => {
   return api.get(`/tv/${tvId}/credits`).then((res) => res.data)
 }
 
-export const fetchTVVideos = (tvId: string) => {
+export const fetchTVVideos = (tvId: number | string) => {
   return api.get(`/tv/${tvId}/videos`).then((res) => res.data)
 }
 
-export const fetchSimilarTVShows = (tvId: string) => {
+export const fetchSimilarTVShows = (tvId: number | string) => {
   return api.get(`/tv/${tvId}/similar`).then((res) => res.data)
 }
 
-export const fetchTVReviews = (tvId: string) => {
+export const fetchTVReviews = (tvId: number | string) => {
   return api.get(`/tv/${tvId}/reviews`).then((res) => res.data)
 }
 
-export const fetchSeasonDetails = (tvId: string, seasonNumber: number) => {
+export const fetchSeasonDetails = (tvId: number | string, seasonNumber: number | string) => {
   return api.get(`/tv/${tvId}/season/${seasonNumber}`).then((res) => res.data)
 }
 
-export const fetchEpisodeDetails = (tvId: string, seasonNumber: number, episodeNumber: number) => {
+export const fetchEpisodeDetails = (tvId: number | string, seasonNumber: number | string, episodeNumber: number | string) => {
   return api.get(`/tv/${tvId}/season/${seasonNumber}/episode/${episodeNumber}`).then((res) => res.data)
 }
 
-interface SearchTVParams {
-  query?: string
-  page?: number
-  genres?: string[]
-  year?: number
-  sortBy?: string
-}
-
-export const searchTVShows = (params: SearchTVParams) => {
+export const searchTVShows = (params: any) => {
   const { query, page = 1, genres, year, sortBy } = params
 
   if (query) {
@@ -104,18 +96,6 @@ export const fetchTVGenres = () => {
   return api.get("/genre/tv/list").then((res) => res.data)
 }
 
-export const fetchTVWatchProviders = (tvId: string) => {
+export const fetchTVWatchProviders = (tvId: number | string) => {
   return api.get(`/tv/${tvId}/watch/providers`).then((res) => res.data)
-}
-
-// Helper function to get image URL
-export const getImageUrl = (path: string | null, size = "w500") => {
-  if (!path) return null
-  return `https://image.tmdb.org/t/p/${size}${path}`
-}
-
-// Helper function to get backdrop URL
-export const getBackdropUrl = (path: string | null, size = "w1280") => {
-  if (!path) return null
-  return `https://image.tmdb.org/t/p/${size}${path}`
 }

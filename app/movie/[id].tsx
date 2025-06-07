@@ -134,31 +134,29 @@ export default function MovieDetailScreen() {
   const scrollY = useSharedValue(0)
 
   useEffect(() => {
+    const loadMovie = async () => {
+      try {
+        setLoading(true)
+        const movieData = await fetchMovieDetails(id as string)
+        setMovie(movieData)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error loading movie details:", error)
+        setLoading(false)
+      }
+    }
+    const checkIfFavorite = async () => {
+      try {
+        const favoritesJson = await AsyncStorage.getItem("favoriteMovies")
+        const favorites = favoritesJson ? JSON.parse(favoritesJson) : []
+        setIsFavorite(favorites.includes(Number(id)))
+      } catch (error) {
+        console.error("Error checking favorites:", error)
+      }
+    }
     loadMovie()
     checkIfFavorite()
   }, [id])
-
-  const loadMovie = async () => {
-    try {
-      setLoading(true)
-      const movieData = await fetchMovieDetails(id as string)
-      setMovie(movieData)
-      setLoading(false)
-    } catch (error) {
-      console.error("Error loading movie details:", error)
-      setLoading(false)
-    }
-  }
-
-  const checkIfFavorite = async () => {
-    try {
-      const favoritesJson = await AsyncStorage.getItem("favoriteMovies")
-      const favorites = favoritesJson ? JSON.parse(favoritesJson) : []
-      setIsFavorite(favorites.includes(Number(id)))
-    } catch (error) {
-      console.error("Error checking favorites:", error)
-    }
-  }
 
   const toggleFavorite = async () => {
     try {
@@ -575,6 +573,7 @@ const styles = StyleSheet.create({
   },
   posterContainer: {
     flexDirection: "row",
+    paddingTop: HEADER_HEIGHT - 280,
     paddingHorizontal: 16,
     marginTop: HEADER_HEIGHT - 80,
     marginBottom: 24,

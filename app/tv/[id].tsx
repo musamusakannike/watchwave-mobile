@@ -29,7 +29,8 @@ import Animated, {
 } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-import { fetchTVDetails, getBackdropUrl, getImageUrl } from "@/api/tv"
+import { getBackdropUrl, getImageUrl } from "@/api/movies"
+import { fetchTVDetails } from "@/api/tv"
 import { CastList } from "@/components/CastList"
 import { ReviewList } from "@/components/ReviewList"
 import { SeasonList } from "@/components/SeasonList"
@@ -94,31 +95,29 @@ export default function TVDetailScreen() {
   const scrollY = useSharedValue(0)
 
   useEffect(() => {
+    const loadTVShow = async () => {
+      try {
+        setLoading(true)
+        const tvData = await fetchTVDetails(id as string)
+        setShow(tvData)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error loading TV show details:", error)
+        setLoading(false)
+      }
+    }
+    const checkIfFavorite = async () => {
+      try {
+        const favoritesJson = await AsyncStorage.getItem("favoriteTVShows")
+        const favorites = favoritesJson ? JSON.parse(favoritesJson) : []
+        setIsFavorite(favorites.includes(Number(id)))
+      } catch (error) {
+        console.error("Error checking favorites:", error)
+      }
+    }
     loadTVShow()
     checkIfFavorite()
   }, [id])
-
-  const loadTVShow = async () => {
-    try {
-      setLoading(true)
-      const tvData = await fetchTVDetails(id as string)
-      setShow(tvData)
-      setLoading(false)
-    } catch (error) {
-      console.error("Error loading TV show details:", error)
-      setLoading(false)
-    }
-  }
-
-  const checkIfFavorite = async () => {
-    try {
-      const favoritesJson = await AsyncStorage.getItem("favoriteTVShows")
-      const favorites = favoritesJson ? JSON.parse(favoritesJson) : []
-      setIsFavorite(favorites.includes(Number(id)))
-    } catch (error) {
-      console.error("Error checking favorites:", error)
-    }
-  }
 
   const toggleFavorite = async () => {
     try {
@@ -319,7 +318,7 @@ export default function TVDetailScreen() {
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                   router.push({
-                    pathname: "/(tabs)/tv/seasons",
+                    pathname: "/seasons",
                     params: { id: show.id, title: show.name }
                   })
                 }}
@@ -407,7 +406,7 @@ export default function TVDetailScreen() {
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                   router.push({
-                    pathname: "/(tabs)/tv/cast",
+                    pathname: "/cast",
                     params: { id: show.id, type: "tv", title: show.name }
                   })
                 }}
@@ -463,7 +462,7 @@ export default function TVDetailScreen() {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
               const trailer = show.videos.results.find(v => v.type === "Trailer") || show.videos.results[0]
               router.push({
-                pathname: "/(tabs)/tv/video",
+                pathname: "/video",
                 params: { id: trailer.key, title: show.name }
               })
             }}
@@ -552,6 +551,7 @@ const styles = StyleSheet.create({
   posterContainer: {
     flexDirection: "row",
     paddingHorizontal: 16,
+    paddingTop: HEADER_HEIGHT - 250,
     marginTop: HEADER_HEIGHT - 80,
     marginBottom: 24,
   },
