@@ -1,45 +1,80 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { BlurView } from "expo-blur"
+import * as Haptics from "expo-haptics"
+import { Tabs } from "expo-router"
+import { StyleSheet } from "react-native"
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function TabsLayout() {
+  const handleTabPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+  }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarShowLabel: false,
+        tabBarStyle: styles.tabBar,
+        tabBarBackground: () => <BlurView intensity={80} tint="dark" style={StyleSheet.absoluteFill} />,
+        tabBarActiveTintColor: "#E50914",
+        tabBarInactiveTintColor: "#888888",
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="home" size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: () => handleTabPress(),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="magnify" size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: () => handleTabPress(),
+        }}
+      />
+      <Tabs.Screen
+        name="tv"
+        options={{
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="television" size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: () => handleTabPress(),
+        }}
+      />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="heart" size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: () => handleTabPress(),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="account" size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: () => handleTabPress(),
         }}
       />
     </Tabs>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    position: "absolute",
+    borderTopWidth: 0,
+    elevation: 0,
+    height: 60,
+    backgroundColor: "rgba(18, 18, 18, 0.7)",
+  },
+})
