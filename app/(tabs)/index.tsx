@@ -161,7 +161,10 @@ export default function HomeScreen() {
           {featured && <FeaturedMovie movie={featured} onPress={() => handleMoviePress(featured)} />}
 
           <View style={styles.categoryContainer}>
-            <CategorySelector selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+            <CategorySelector
+              selectedCategory={selectedCategory}
+              onSelectCategory={(categoryId: string) => setSelectedCategory(categoryId as CategoryType)}
+            />
           </View>
 
           <Animated.View entering={FadeInRight.delay(200).duration(500)}>

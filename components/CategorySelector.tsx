@@ -1,6 +1,6 @@
-import { ScrollView, TouchableOpacity, Text, StyleSheet } from "react-native"
-import Animated, { FadeInRight } from "react-native-reanimated"
 import * as Haptics from "expo-haptics"
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import Animated, { FadeInRight } from "react-native-reanimated"
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
 
@@ -15,8 +15,19 @@ const defaultCategories = [
   { id: "thriller", name: "Thriller" },
 ]
 
-export function CategorySelector({ selectedCategory, onSelectCategory, categories = defaultCategories }) {
-  const handleCategoryPress = (categoryId) => {
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface CategorySelectorProps {
+  selectedCategory: string;
+  onSelectCategory: (categoryId: string) => void;
+  categories?: Category[];
+}
+
+export function CategorySelector({ selectedCategory, onSelectCategory, categories = defaultCategories }: CategorySelectorProps) {
+  const handleCategoryPress = (categoryId: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     onSelectCategory(categoryId)
   }
